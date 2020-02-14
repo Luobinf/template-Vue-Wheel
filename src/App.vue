@@ -39,14 +39,15 @@
     </section>
     <section>
       <hr>
-      <f-tabs :value.sync="activeName" @tab-click="handleClick">
+      <f-tabs :selected.sync="activeName" @tab-click="handleClick">
         <!--   name表示选项卡的别名   -->
-        <f-tab-pane label="用户管理配置" name="1">用户管理</f-tab-pane>
-        <f-tab-pane label="配置管理" name="2">配置管理</f-tab-pane>
-        <f-tab-pane label="角色管理哈哈哈哈" name="3">角色管理</f-tab-pane>
-        <f-tab-pane label="定时任务补偿" name="4">定时任务补偿</f-tab-pane>
+        <f-tab-pane label="用户管理配置" name="first">用户管理</f-tab-pane>
+        <f-tab-pane label="配置管理" name="second">配置管理</f-tab-pane>
+        <f-tab-pane label="角色管理哈哈哈哈" name="third">角色管理</f-tab-pane>
+        <f-tab-pane label="定时任务补偿" name="forth">定时任务补偿</f-tab-pane>
       </f-tabs>
       当前激活的选项卡名字为: {{activeName}}
+      <hr>
     </section>
 
     <section>
@@ -91,7 +92,7 @@
       return {
         message: 'hello',
         eventBus: new Vue(),
-        activeName: '1',
+        activeName: 'third',
         selectedTab: 'sports'
       }
     },

@@ -1,5 +1,5 @@
 <template>
-  <div class="f-tabs-pane" v-show="tabName === selectedTab">
+  <div class="f-tabs-pane" v-show="active">
     <slot></slot>
   </div>
 </template>
@@ -9,13 +9,7 @@ export default {
   name: 'fTabPane',
   data () {
     return {
-      tabName: this.name,
-      tab: ''
-    }
-  },
-  computed: {
-    selectedTab() {
-      return this.tab
+      active: false
     }
   },
   inject: ['eventBus'],
@@ -28,14 +22,14 @@ export default {
     }
   },
   created() {
-    this.eventBus.$emit('update:headerTabsItems',this.label,this.name)
-    this.eventBus.$on('initialSelected',(val) => {
-      this.tab = val
+    this.eventBus.$on('update:selected',(item) => {
+      this.active = item.name === this.name || item === this.name
     })
   },
   mounted() {
-    this.eventBus.$on('update:selectedTab',(val) => {
-      this.tab = val
+    this.eventBus.$emit('update:TabsItems',{
+      label: this.label,
+      name: this.name
     })
   }
 }
