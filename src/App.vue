@@ -77,8 +77,8 @@
   import fToast from './components/Toast'
   import Vue from 'vue'
   import Emitter from './components/emitter'
-  import fTabs from './components/Tabs'
-  import fTabPane from './components/TabPane'
+  import fTabs from './components/fTabs/Tabs'
+  import fTabPane from './components/fTabs/TabPane'
 
   import gTabs from './components/Tabs/Tabs'
   import gTabsHead from './components/Tabs/TabsHead'
