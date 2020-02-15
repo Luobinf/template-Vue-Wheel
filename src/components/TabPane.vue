@@ -6,7 +6,7 @@
 
 <script type="text/javascript">
 export default {
-  name: 'fTabPane',
+  name: 'fTabsPane',
   data () {
     return {
       active: false

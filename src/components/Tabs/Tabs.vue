@@ -56,6 +56,5 @@ export default {
 <style scoped lang="scss">
   .f-tabs{
     width: 800px;
-    margin: 0 auto;
   }
 </style>

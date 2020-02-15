@@ -75,6 +75,13 @@ export default {
           }
         })
       })
+    },
+    checkChildren() {
+      this.$children.forEach((vm) => {
+        if(vm.$options.name !== 'fTabsPane') {
+          throw new Error(`f-tabs的子组件只能是f-tab-pane，而你不是这样做的`)
+        }
+      })
     }
   },
   created() {
@@ -84,6 +91,7 @@ export default {
     })
   },
   mounted() {
+    this.checkChildren()
     this.initSelectTab()
   }
 };
