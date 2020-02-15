@@ -41,7 +41,7 @@
       <hr>
       <f-tabs :selected.sync="activeName" @tab-click="handleClick">
         <!--   name表示选项卡的别名   -->
-        <f-tab-pane label="用户管理配置" name="first">用户管理</f-tab-pane>
+        <f-tab-pane label="用户管理配置" name="first" disabled>用户管理</f-tab-pane>
         <f-tab-pane label="配置管理" name="second">配置管理</f-tab-pane>
         <f-tab-pane label="角色管理哈哈哈哈" name="third">角色管理</f-tab-pane>
         <f-tab-pane label="定时任务补偿" name="forth">定时任务补偿</f-tab-pane>
@@ -92,7 +92,7 @@
       return {
         message: 'hello',
         eventBus: new Vue(),
-        activeName: 'third',
+        activeName: 'second',
         selectedTab: 'sports'
       }
     },

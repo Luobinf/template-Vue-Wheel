@@ -38,21 +38,22 @@ export default {
   methods: {
     tabsClasses(item) {
       return {
-        'is-active': item.name === this.activeName
+        'is-active': item.name === this.activeName,
+        'is-disabled': item.disabled
       }
     },
     handleChange(index) {
       let selectedTabItem = this.TabsItems[index]
-      this.activeName = selectedTabItem.name
-      this.eventBus.$emit('update:selected',selectedTabItem)
+      //如果tab可以选中，才执行
+      if(!selectedTabItem.disabled) {
+        this.activeName = selectedTabItem.name
+        this.eventBus.$emit('update:selected',selectedTabItem)
+      }
     }
   },
   created() {
-    this.eventBus.$on("update:TabsItems", ({label, name}) => {
-      this.TabsItems.push({
-        label:label,
-        name:name
-      })
+    this.eventBus.$on("update:TabsItems", (item) => {
+      this.TabsItems.push(item)
     })
   },
   mounted() {
@@ -84,6 +85,11 @@ $font-size: 14px;
       }
       &.is-active {
         color: #1890ff;
+        font-weight: bold;
+      }
+      &.is-disabled {
+        cursor: not-allowed;
+        color: rgba(0, 0, 0, 0.25);
       }
     }
   }
