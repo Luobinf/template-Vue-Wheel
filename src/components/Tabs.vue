@@ -1,13 +1,13 @@
 <template>
   <div class="f-tabs">
-    <div class="f-tabs-head">
+    <div class="f-tabs-head" ref="head">
       <div class="f-tabs-item" v-for="(item, index) in TabsItems" :key="index" :class="tabsItemClasses(item)"
-           @click="handleChange(index)"
+           @click="handleChange(index)" ref="items" :data-name="item.name"
       >
         {{item.label}}
       </div>
+      <div class="line" ref="line"></div>
     </div>
-    <div class="line" ref="line"></div>
     <div class="f-tabs-content">
       <slot></slot>
     </div>
@@ -52,15 +52,36 @@ export default {
     },
     handleChange(index) {
       let selectedTabItem = this.TabsItems[index]
-      //如果tab可以选中，才执行
-      if(!selectedTabItem.disabled) {
-        this.activeName = selectedTabItem.name
-        this.eventBus.$emit('update:selected',selectedTabItem)
+      if(selectedTabItem.disabled) {
+        return
       }
+      //如果tab可以选中，才执行
+      this.activeName = selectedTabItem.name
+      this.eventBus.$emit('update:selected',selectedTabItem)
+      //触发事件以更新外面的selectedTab值
+      this.$emit('update:selected',selectedTabItem.name)
+    },
+    updateLinePositionAndWidth(item) {
+      this.$nextTick( () => {
+        let headElement = this.$refs.head.getBoundingClientRect()
+        let headLeft = headElement.left
+        this.$refs.items.forEach((element) => {
+          let dataName = element.getAttribute('data-name')
+          if(dataName === item || dataName === item.name) {
+            let {width,left} = element.getBoundingClientRect()
+            this.$refs.line.style.width = `${width}px`
+            // 需要获取偏移量
+            this.$refs.line.style.left = left - headLeft + 'px'
+          }
+        })
+      })
     }
   },
   created() {
     this.initTabsItemsData()
+    this.eventBus.$on('update:selected',(name) => {
+      this.updateLinePositionAndWidth(name)
+    })
   },
   mounted() {
     this.initSelectTab()
@@ -71,11 +92,11 @@ export default {
 <style scoped lang="scss">
 $font-size: 14px;
 .f-tabs {
-  width: 600px;
+  margin-left: 100px;
   .f-tabs-head {
     display: flex;
     align-items: center;
-    border-bottom: 2px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
     font-size: $font-size;
     position: relative;
     .f-tabs-item {
@@ -98,19 +119,16 @@ $font-size: 14px;
         color: rgba(0, 0, 0, 0.25);
       }
     }
-  }
-  .line {
-    display: block;
-    height: 2px;
-    background-color: #1890ff;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    transition: all 0.5s;
+    .line {
+      height: 2px;
+      background-color: #1890ff;
+      position: absolute;
+      bottom: 0;
+      transition: all 0.5s;
+    }
   }
   .f-tabs-content {
-    border: 1px solid red;
-    padding: 1em 0;
+    margin-top: 1em;
   }
 }
 </style>

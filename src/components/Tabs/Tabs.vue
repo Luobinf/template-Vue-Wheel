@@ -46,7 +46,7 @@ export default {
       }
     })
     this.eventBus.$on('update:selected',(name) => {
-      //事件触发以更新外面的selectedTab值
+      //触发事件以更新外面的selectedTab值
       this.$emit('update:selected',name)
     })
   }
