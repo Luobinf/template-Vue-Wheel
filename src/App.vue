@@ -51,11 +51,11 @@
     </section>
 
     <section>
-      <g-tabs :selected.sync="selectedTab" direction="horizontal">
+      <g-tabs :selected.sync="selectedTab">
         <g-tabs-head>
-          <g-tabs-item name="woman">美女</g-tabs-item>
+          <g-tabs-item name="woman">美女与野兽</g-tabs-item>
           <g-tabs-item name="finance">财经</g-tabs-item>
-          <g-tabs-item name="sports">体育</g-tabs-item>
+          <g-tabs-item name="sports">体育生活</g-tabs-item>
           <template v-slot:actions>
             <button>设置</button>
           </template>
@@ -66,6 +66,7 @@
           <g-tabs-pane name="sports">体育相关资讯</g-tabs-pane>
         </g-tabs-body>
       </g-tabs>
+      {{selectedTab}}
     </section>
   </div>
 </template>

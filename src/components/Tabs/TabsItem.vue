@@ -1,5 +1,5 @@
 <template>
-  <div class="f-tabs-item" @click="xxx" :class="classes">
+  <div class="f-tabs-item" @click="handleClick" :class="classes">
     <slot></slot>
   </div>
 </template>
@@ -36,8 +36,8 @@ export default {
     })
   },
   methods: {
-    xxx() {
-      this.eventBus.$emit('update:selected',this.name)
+    handleClick() {
+      this.eventBus.$emit('update:selected',this.name,this)
     }
   }
 }
@@ -49,11 +49,15 @@ export default {
     padding: 0 1em;
     transition: all 0.5s;
     cursor: pointer;
-    &.is-active {
-      color: #1890ff;
-    }
+    height: 100%;
+    display: flex;
+    align-items: center;
     &:hover {
       color: #1890ff;
+    }
+    &.is-active {
+      color: #1890ff;
+      font-weight: bold;
     }
   }
 </style>

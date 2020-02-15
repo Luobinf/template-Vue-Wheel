@@ -1,7 +1,7 @@
 <template>
   <div class="f-tabs">
     <div class="f-tabs-head">
-      <div class="f-tabs-item" v-for="(item, index) in TabsItems" :key="index" :class="tabsClasses(item)"
+      <div class="f-tabs-item" v-for="(item, index) in TabsItems" :key="index" :class="tabsItemClasses(item)"
            @click="handleChange(index)"
       >
         {{item.label}}
@@ -36,7 +36,15 @@ export default {
     }
   },
   methods: {
-    tabsClasses(item) {
+    initTabsItemsData() {
+      this.eventBus.$on("update:TabsItems", (item) => {
+        this.TabsItems.push(item)
+      })
+    },
+    initSelectTab() {
+      this.eventBus.$emit('update:selected',this.selected)
+    },
+    tabsItemClasses(item) {
       return {
         'is-active': item.name === this.activeName,
         'is-disabled': item.disabled
@@ -52,12 +60,10 @@ export default {
     }
   },
   created() {
-    this.eventBus.$on("update:TabsItems", (item) => {
-      this.TabsItems.push(item)
-    })
+    this.initTabsItemsData()
   },
   mounted() {
-    this.eventBus.$emit('update:selected',this.selected)
+    this.initSelectTab()
   }
 };
 </script>
@@ -94,7 +100,6 @@ $font-size: 14px;
     }
   }
   .line {
-    content: "";
     display: block;
     height: 2px;
     background-color: #1890ff;

@@ -22,21 +22,25 @@ export default {
       required: true
     },
     disabled: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false
     }
   },
   created() {
-    this.eventBus.$on('update:selected',(item) => {
-      this.active = item.name === this.name || item === this.name
-    })
+    if(this.eventBus) {
+      this.eventBus.$on('update:selected',(item) => {
+        this.active = item.name === this.name || item === this.name
+      })
+    }
   },
   mounted() {
-    this.eventBus.$emit('update:TabsItems',{
-      label: this.label,
-      name: this.name,
-      disabled: this.disabled
-    })
+    if(this.eventBus) {
+      this.eventBus.$emit('update:TabsItems',{
+        label: this.label,
+        name: this.name,
+        disabled: this.disabled
+      })
+    }
   }
 }
 </script>
