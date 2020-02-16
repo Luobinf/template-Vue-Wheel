@@ -100,7 +100,8 @@ export default {
 <style scoped lang="scss">
 $font-size: 14px;
 .f-tabs {
-  margin-left: 100px;
+  width: 600px;
+  margin: 0 auto;
   .f-tabs-head {
     display: flex;
     align-items: center;

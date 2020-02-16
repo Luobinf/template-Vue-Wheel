@@ -53,7 +53,7 @@
     <section>
       <g-tabs :selected.sync="selectedTab">
         <g-tabs-head>
-          <g-tabs-item name="woman">美女与野兽</g-tabs-item>
+          <g-tabs-item name="woman">美女</g-tabs-item>
           <g-tabs-item name="finance">财经</g-tabs-item>
           <g-tabs-item name="sports">体育生活</g-tabs-item>
           <template v-slot:actions>
@@ -68,6 +68,11 @@
       </g-tabs>
       {{selectedTab}}
     </section>
+    <section style="margin-top: 100px">
+      <f-popover width="200">
+        <button>Click Me</button>
+      </f-popover>
+    </section>
   </div>
 </template>
 <script>
@@ -77,6 +82,7 @@
   import fToast from './components/Toast'
   import Vue from 'vue'
   import Emitter from './components/emitter'
+
   import fTabs from './components/fTabs/Tabs'
   import fTabPane from './components/fTabs/TabPane'
 
@@ -85,6 +91,8 @@
   import gTabsBody from './components/Tabs/TabsBody'
   import gTabsItem from './components/Tabs/TabsItem'
   import gTabsPane from './components/Tabs/TabsPane'
+
+  import fPopover from './components/Popover'
   export default {
     name: 'App',
     //混入
@@ -114,7 +122,8 @@
       gTabsHead,
       gTabsBody,
       gTabsItem,
-      gTabsPane
+      gTabsPane,
+      fPopover
     },
     methods: {
       xxx() {
