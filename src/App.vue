@@ -70,7 +70,16 @@
     </section>
     <section style="margin-top: 100px">
       <f-popover width="200">
-        <button>Click Me</button>
+       <template v-slot:content>
+         <div>popover内容</div>
+       </template>
+        <button>Cilck Me</button>
+      </f-popover>
+      <f-popover width="200">
+        <template v-slot:content>
+          <div>popover内容</div>
+        </template>
+        <button>Cilck Me</button>
       </f-popover>
     </section>
   </div>
