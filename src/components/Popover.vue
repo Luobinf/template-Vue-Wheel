@@ -27,8 +27,8 @@ export default {
     },
     listenToDocument() {
       let eventHandler = (e) => {
-        if (this.$refs.contentWrapper && 
-                this.$refs.contentWrapper.contains(e.target)) {
+        if (this.$refs.popover &&
+                this.$refs.popover.contains(e.target)) {
           return
         }
         this.visible = false
