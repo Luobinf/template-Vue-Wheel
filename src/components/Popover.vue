@@ -1,5 +1,5 @@
 <template>
-  <div class="f-popover" @click.stop="xxx">
+  <div class="f-popover" @click="onClick" ref="popover">
     <div v-if="visible" class="content-wrapper" ref="contentWrapper">
       <slot name="content"></slot>
     </div>
@@ -18,29 +18,41 @@ export default {
     };
   },
   methods: {
-    xxx() {
-      this.visible = !this.visible
-      if (this.visible) {
-        setTimeout(() => {
-          let contentWrapper = this.$refs.contentWrapper
-          document.body.append(contentWrapper)
-          let {left,top,width,height} = this.$refs.triggerWrapper.getBoundingClientRect()
-          contentWrapper.style.top = top + window.pageYOffset + 'px'
-          contentWrapper.style.left = left + window.pageXOffset + `px`
-          let eventHandler = () => {
-            this.visible = false
-            console.log(`document 隐藏 popover`)
-            document.removeEventListener('click',eventHandler)
-          }
-          document.addEventListener("click", eventHandler)
-        }, 0)
-      } else {
-        console.log(`vm 隐藏 popover`)
+    positionContent() {
+      let contentWrapper = this.$refs.contentWrapper
+      document.body.append(contentWrapper)
+      let {left,top} = this.$refs.triggerWrapper.getBoundingClientRect()
+      contentWrapper.style.top = top + window.pageYOffset + 'px'
+      contentWrapper.style.left = left + window.pageXOffset + `px`
+    },
+    listenToDocument() {
+      let eventHandler = (e) => {
+        if (this.$refs.contentWrapper && 
+                this.$refs.contentWrapper.contains(e.target)) {
+          return
+        }
+        this.visible = false
+        console.log('关闭')
+        document.removeEventListener('click', eventHandler)
+      }
+      document.addEventListener("click", eventHandler)
+    },
+    onShow() {
+      setTimeout(() => {
+        this.positionContent()
+        this.listenToDocument()
+      }, 0)
+    },
+    onClick(event) {
+      if(this.$refs.triggerWrapper.contains(event.target)) {
+        this.visible = !this.visible
+        if (this.visible) {
+          this.onShow()
+        } else {
+          console.log(`被关闭了`)
+        }
       }
     }
-  },
-  mounted() {
-    console.log(this.$refs.triggerWrapper)
   }
 };
 </script>

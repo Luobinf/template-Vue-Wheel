@@ -69,7 +69,7 @@
       {{selectedTab}}
     </section>
     <section style="margin-top: 100px">
-      <div style="overflow: hidden;border: 1px solid red;padding: 5px;">
+      <div style="border: 1px solid red;padding: 5px;">
         <f-popover width="200">
           <template v-slot:content>
             <div>popover内容</div>
