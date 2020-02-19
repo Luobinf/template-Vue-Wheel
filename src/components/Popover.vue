@@ -1,9 +1,11 @@
 <template>
   <div class="f-popover" @click.stop="xxx">
-    <div v-show="visible" class="content-wrapper" @click.stop>
+    <div v-if="visible" class="content-wrapper" ref="contentWrapper">
       <slot name="content"></slot>
     </div>
-    <slot></slot>
+    <span class="trigger" ref="triggerWrapper">
+      <slot></slot>
+    </span>
   </div>
 </template>
 
@@ -20,17 +22,25 @@ export default {
       this.visible = !this.visible
       if (this.visible) {
         setTimeout(() => {
-          let x = () => {
+          let contentWrapper = this.$refs.contentWrapper
+          document.body.append(contentWrapper)
+          let {left,top,width,height} = this.$refs.triggerWrapper.getBoundingClientRect()
+          contentWrapper.style.top = top + window.pageYOffset + 'px'
+          contentWrapper.style.left = left + window.pageXOffset + `px`
+          let eventHandler = () => {
             this.visible = false
             console.log(`document 隐藏 popover`)
-            document.removeEventListener('click',x)
+            document.removeEventListener('click',eventHandler)
           }
-          document.addEventListener("click", x)
+          document.addEventListener("click", eventHandler)
         }, 0)
       } else {
         console.log(`vm 隐藏 popover`)
       }
     }
+  },
+  mounted() {
+    console.log(this.$refs.triggerWrapper)
   }
 };
 </script>
@@ -40,11 +50,15 @@ export default {
   display: inline-block;
   vertical-align: top;
   position: relative;
-  .content-wrapper {
-    position: absolute;
-    left: 0;
-    bottom: 100%;
-    border: 1px solid red;
+  .trigger {
+    display: inline-block;
   }
+}
+.content-wrapper {
+  position: absolute;
+  border: 1px solid red;
+  width: 200px;
+  height: 100px;
+  transform: translateY(-100%);
 }
 </style>
