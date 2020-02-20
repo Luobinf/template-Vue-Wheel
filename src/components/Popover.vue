@@ -1,6 +1,6 @@
 <template>
   <div class="f-popover" @click="onClick" ref="popover">
-    <div v-if="visible" class="content-wrapper" ref="contentWrapper">
+    <div class="content-wrapper" ref="contentWrapper" v-show="visible">
       <slot name="content"></slot>
     </div>
     <span class="trigger" ref="triggerWrapper">
@@ -15,41 +15,44 @@ export default {
   data() {
     return {
       visible: false
-    };
+    }
   },
   methods: {
-    positionContent() {
+    eventHandler(e) {
+      if(this.$refs.contentWrapper && this.$refs.contentWrapper.contains(e.target)) {
+        return
+      }
+      // 当点击按钮时直接退出，应该由onCLick方法去关闭popover，不应该由document来关闭
+      if(this.$refs.popover && this.$refs.popover.contains(e.target)) {
+        return
+      }
+      this.close()
+    },
+    locateContent() {
       let contentWrapper = this.$refs.contentWrapper
       document.body.append(contentWrapper)
-      let {left,top} = this.$refs.triggerWrapper.getBoundingClientRect()
-      contentWrapper.style.top = top + window.pageYOffset + 'px'
-      contentWrapper.style.left = left + window.pageXOffset + `px`
+      let triggerWrapper = this.$refs.triggerWrapper
+      let {top,left} = triggerWrapper.getBoundingClientRect() //获取元素相对于窗口的位置信息
+      contentWrapper.style.left = left + window.pageXOffset +'px'
+      contentWrapper.style.top = top + window.pageYOffset+ 'px'
     },
-    listenToDocument() {
-      let eventHandler = (e) => {
-        if (this.$refs.popover &&
-                this.$refs.popover.contains(e.target)) {
-          return
-        }
-        this.visible = false
-        console.log('关闭')
-        document.removeEventListener('click', eventHandler)
-      }
-      document.addEventListener("click", eventHandler)
+    open() {
+      this.visible = true
+      this.locateContent()
+      setTimeout( () => {
+        document.addEventListener('click',this.eventHandler)
+      },0)
     },
-    onShow() {
-      setTimeout(() => {
-        this.positionContent()
-        this.listenToDocument()
-      }, 0)
+    close() {
+      this.visible = false
+      document.removeEventListener('click',this.eventHandler)
     },
-    onClick(event) {
-      if(this.$refs.triggerWrapper.contains(event.target)) {
-        this.visible = !this.visible
-        if (this.visible) {
-          this.onShow()
+    onClick(e) {
+      if(this.$refs.triggerWrapper.contains(e.target)) {
+        if(this.visible === true) {
+          this.close()
         } else {
-          console.log(`被关闭了`)
+          this.open()
         }
       }
     }
@@ -68,9 +71,8 @@ export default {
 }
 .content-wrapper {
   position: absolute;
-  border: 1px solid red;
   width: 200px;
-  height: 100px;
   transform: translateY(-100%);
+  border: 1px solid skyblue;
 }
 </style>
