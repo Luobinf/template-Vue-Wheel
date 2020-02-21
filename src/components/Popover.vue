@@ -44,19 +44,22 @@ export default {
       let {top,left,bottom,right,height} = triggerWrapper.getBoundingClientRect() //获取元素相对于窗口的位置信息
       let  differenceHeight = contentWrapper.getBoundingClientRect().height - height
 
-      if(this.position === 'top') {
-        contentWrapper.style.left = left + window.pageXOffset + 'px'
-        contentWrapper.style.top = top + window.pageYOffset + 'px'
-      } else if(this.position === 'bottom') {
-        contentWrapper.style.left = left + window.pageXOffset + 'px'
-        contentWrapper.style.top = bottom + window.pageYOffset + 'px'
-      } else if(this.position === 'left') {
-        contentWrapper.style.left = left + window.pageXOffset + 'px'
-        contentWrapper.style.top = top + window.pageYOffset - differenceHeight/2 + 'px'
-      } else if(this.position === 'right') {
-        contentWrapper.style.left = right + window.pageXOffset + 'px'
-        contentWrapper.style.top = top + window.pageYOffset - differenceHeight/2 + 'px'
+      let contentPosition = {
+          top: {
+              left: left + window.pageXOffset, top: top + window.pageYOffset
+          },
+          bottom: {
+              left: left + window.pageXOffset, top: bottom + window.pageYOffset
+          },
+          left: {
+              left: left + window.pageXOffset, top: top + window.pageYOffset - differenceHeight/2
+          },
+          right: {
+              left: right + window.pageXOffset, top: top + window.pageYOffset - differenceHeight/2
+          }
       }
+      contentWrapper.style.left = `${contentPosition[this.position].left}px`
+      contentWrapper.style.top = `${contentPosition[this.position].top}px`
     },
     open() {
       this.visible = true
