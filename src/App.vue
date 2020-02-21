@@ -70,31 +70,50 @@
     </section>
     <section style="margin-top: 100px">
       <div style="border: 1px solid red;padding: 5px;width: 500px;margin-left: 100px">
-        <f-popover width="200">
-          <template v-slot:content>
-            <div>popover内容popover内容</div>
-          </template>
+        <f-popover width="200" title="Title" content="popover内容popover内容">
           <f-button>Top</f-button>
         </f-popover>
-        <f-popover width="200" position="bottom">
+        <f-popover width="200" position="bottom" title="Title">
           <template v-slot:content>
-            <div>popover内容</div>
+            <p>Content内容</p>
+            <p>Content内容</p>
           </template>
           <f-button size="small">Bottom</f-button>
         </f-popover>
-        <f-popover width="200" position="left">
-          <template v-slot:content>
-            <div>popover内容</div>
-          </template>
+        <f-popover width="200" position="left" title="Title" content="popover内容popover内容">
           <f-button size="small">Left</f-button>
         </f-popover>
-        <f-popover width="200" position="right" trigger="hover">
+        <f-popover width="200" position="right">
           <template v-slot:content>
             <div>popover内容</div>
           </template>
           <f-button size="small">Right</f-button>
         </f-popover>
       </div>
+      <f-popover width="200" trigger="hover">
+        <template v-slot:content>
+          <div>popover内容popover内容</div>
+        </template>
+        <f-button>Top</f-button>
+      </f-popover>
+      <f-popover width="200" position="bottom" trigger="hover">
+        <template v-slot:content>
+          <div>popover内容</div>
+        </template>
+        <f-button size="small">Bottom</f-button>
+      </f-popover>
+      <f-popover width="200" position="left" trigger="hover">
+        <template v-slot:content>
+          <div>popover内容</div>
+        </template>
+        <f-button size="small">Left</f-button>
+      </f-popover>
+      <f-popover width="200" position="right" trigger="hover">
+        <template v-slot:content>
+          <div>popover内容</div>
+        </template>
+        <f-button size="small">Right</f-button>
+      </f-popover>
     </section>
   </div>
 </template>

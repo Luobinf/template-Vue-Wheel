@@ -1,8 +1,18 @@
 <template>
   <div class="f-popover" ref="popover">
-    <div class="content-wrapper" ref="contentWrapper" v-show="visible" :class="[`position-${position}`]">
-      <slot name="content"></slot>
-    </div>
+    <transition name="fade">
+      <div class="content-wrapper" ref="contentWrapper" v-show="visible" :class="[`position-${position}`]"
+           :style="{'width': `${width}px`}"
+      >
+        <div class="title" v-if="title">
+          {{title}}
+        </div>
+        <div class="content">
+          {{content}}
+          <slot name="content"></slot>
+        </div>
+      </div>
+    </transition>
     <span class="trigger" ref="triggerWrapper">
       <slot></slot>
     </span>
@@ -49,6 +59,16 @@ export default {
       validator(val) {
         return ['click','hover'].indexOf(val) >= 0
       }
+    },
+    title: {
+      type: String
+    },
+    content: {
+      type: String
+    },
+    width: {
+      type: String,
+      default: '150'
     }
   },
   methods: {
@@ -118,6 +138,16 @@ export default {
 <style scoped lang="scss">
 $border-radius: 4px;
 $border-color: #333;
+
+.fade-enter,.fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-active,.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter-to {
+  opacity: 100%;
+}
 .f-popover {
   display: inline-block;
   vertical-align: top;
@@ -133,9 +163,24 @@ $border-color: #333;
   /*box-shadow: 0 0 3px rgba(0,0,0,0.5);*/
   filter: drop-shadow(0 0 3px rgba(0,0,0,0.5));
   background-color: white;
-  padding: 0.5em 1em;
-  max-width: 20em;
   word-break: break-all;
+
+  .title {
+    border-bottom: 1px solid rgb(232, 232, 232);
+    padding: 0.5em 1em;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.85);
+    max-width: 20em;
+  }
+  .content {
+    padding: 0.5em 1em;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.65);
+    max-width: 20em;
+  }
+
   &::before,&::after {
     content: '';
     display: block;
@@ -150,7 +195,7 @@ $border-color: #333;
     margin-top: -10px;
     &::before,&::after {
       border-top-color: black;
-      left: 20%;
+      left: 10%;
       top: 100%;
     }
     &::after {
