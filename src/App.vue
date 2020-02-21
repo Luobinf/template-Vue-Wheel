@@ -69,18 +69,30 @@
       {{selectedTab}}
     </section>
     <section style="margin-top: 100px">
-      <div style="border: 1px solid red;padding: 5px;">
+      <div style="border: 1px solid red;padding: 5px;width: 500px;margin-left: 100px">
         <f-popover width="200">
           <template v-slot:content>
-            <div>popover内容</div>
+            <div>popover内容popover内容</div>
           </template>
-          <button>Click Me</button>
+          <f-button>Top</f-button>
         </f-popover>
-        <f-popover width="200">
+        <f-popover width="200" position="bottom">
           <template v-slot:content>
             <div>popover内容</div>
           </template>
-          <button>Click Me</button>
+          <f-button size="small">Bottom</f-button>
+        </f-popover>
+        <f-popover width="200" position="left">
+          <template v-slot:content>
+            <div>popover内容</div>
+          </template>
+          <f-button size="small">Left</f-button>
+        </f-popover>
+        <f-popover width="200" position="right">
+          <template v-slot:content>
+            <div>popover内容</div>
+          </template>
+          <f-button size="small">Right</f-button>
         </f-popover>
       </div>
     </section>
