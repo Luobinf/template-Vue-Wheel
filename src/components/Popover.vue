@@ -1,5 +1,5 @@
 <template>
-  <div class="f-popover" @click="onClick" ref="popover">
+  <div class="f-popover" ref="popover">
     <div class="content-wrapper" ref="contentWrapper" v-show="visible" :class="[`position-${position}`]">
       <slot name="content"></slot>
     </div>
@@ -17,12 +17,37 @@ export default {
       visible: false
     }
   },
+  mounted() {
+    let popover = this.$refs.popover
+    if(this.trigger === 'click') {
+      popover.addEventListener('click',this.onClick)
+    } else {
+      popover.addEventListener('mouseenter',this.open)
+      popover.addEventListener('mouseleave',this.close)
+    }
+  },
+  destroyed() {
+    let popover = this.$refs.popover
+    if(this.trigger === 'click') {
+      popover.removeEventListener('click',this.onClick)
+    } else {
+      popover.removeEventListener('mouseenter',this.open)
+      popover.removeEventListener('mouseleave',this.close)
+    }
+  },
   props: {
     position: {
       type: String,
       default: 'top',
       validator(val) {
         return ['top','bottom','left','right'].indexOf(val) >= 0
+      }
+    },
+    trigger: {
+      type: String,
+      default: 'click',
+      validator(val) {
+        return ['click','hover'].indexOf(val) >= 0
       }
     }
   },

@@ -88,7 +88,7 @@
           </template>
           <f-button size="small">Left</f-button>
         </f-popover>
-        <f-popover width="200" position="right">
+        <f-popover width="200" position="right" trigger="hover">
           <template v-slot:content>
             <div>popover内容</div>
           </template>
