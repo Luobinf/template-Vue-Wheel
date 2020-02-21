@@ -41,8 +41,8 @@ export default {
       let contentWrapper = this.$refs.contentWrapper
       document.body.append(contentWrapper)
       let triggerWrapper = this.$refs.triggerWrapper
-      let {top,left,bottom,right} = triggerWrapper.getBoundingClientRect() //获取元素相对于窗口的位置信息
-      let  differenceHeight = contentWrapper.offsetHeight - triggerWrapper.offsetHeight
+      let {top,left,bottom,right,height} = triggerWrapper.getBoundingClientRect() //获取元素相对于窗口的位置信息
+      let  differenceHeight = contentWrapper.getBoundingClientRect().height - height
 
       if(this.position === 'top') {
         contentWrapper.style.left = left + window.pageXOffset + 'px'
