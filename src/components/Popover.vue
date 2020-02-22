@@ -1,14 +1,18 @@
 <template>
   <div class="f-popover" ref="popover">
     <transition name="fade">
-      <div class="content-wrapper" ref="contentWrapper" v-show="visible" :class="[`position-${position}`]"
-           :style="{'width': `${width}px`}"
+      <div
+        class="content-wrapper"
+        ref="contentWrapper"
+        v-show="showPopover"
+        :class="[`position-${position}`]"
+        :style="{ width: `${width}px` }"
       >
         <div class="title" v-if="title">
-          {{title}}
+          {{ title }}
         </div>
         <div class="content">
-          {{content}}
+          {{ content }}
           <slot name="content"></slot>
         </div>
       </div>
@@ -24,40 +28,25 @@ export default {
   name: "f-popover",
   data() {
     return {
-      visible: false
-    }
-  },
-  mounted() {
-    let popover = this.$refs.popover
-    if(this.trigger === 'click') {
-      popover.addEventListener('click',this.onClick)
-    } else {
-      popover.addEventListener('mouseenter',this.open)
-      popover.addEventListener('mouseleave',this.close)
-    }
-  },
-  destroyed() {
-    let popover = this.$refs.popover
-    if(this.trigger === 'click') {
-      popover.removeEventListener('click',this.onClick)
-    } else {
-      popover.removeEventListener('mouseenter',this.open)
-      popover.removeEventListener('mouseleave',this.close)
-    }
+      showPopover: false
+    };
   },
   props: {
+    visible: {
+      type: Boolean
+    },
     position: {
       type: String,
-      default: 'top',
+      default: "top",
       validator(val) {
-        return ['top','bottom','left','right'].indexOf(val) >= 0
+        return ["top", "bottom", "left", "right"].indexOf(val) >= 0;
       }
     },
     trigger: {
       type: String,
-      default: 'click',
+      default: "click",
       validator(val) {
-        return ['click','hover'].indexOf(val) >= 0
+        return ["click", "hover"].indexOf(val) >= 0;
       }
     },
     title: {
@@ -68,50 +57,98 @@ export default {
     },
     width: {
       type: String,
-      default: '150'
+      default: "150"
+    }
+  },
+  watch: {
+    showPopover(value) {
+      if (value) {
+        this.$emit("show");
+      } else {
+        this.$emit("hide");
+      }
+    },
+    visible: {
+      handler(value) {
+        this.showPopover = value;
+      },
+      immediate: true
+    }
+  },
+  mounted() {
+    let popover = this.$refs.popover;
+    if (this.trigger === "click") {
+      popover.addEventListener("click", this.onClick);
+    } else {
+      popover.addEventListener("mouseenter", this.open);
+      popover.addEventListener("mouseleave", this.close);
+    }
+  },
+  destroyed() {
+    let popover = this.$refs.popover;
+    if (this.trigger === "click") {
+      popover.removeEventListener("click", this.onClick);
+    } else {
+      popover.removeEventListener("mouseenter", this.open);
+      popover.removeEventListener("mouseleave", this.close);
     }
   },
   methods: {
     eventHandler(e) {
-      if(this.$refs.contentWrapper && this.$refs.contentWrapper.contains(e.target)) {
-        return
+      if (
+        this.$refs.contentWrapper &&
+        this.$refs.contentWrapper.contains(e.target)
+      ) {
+        return;
       }
       // 当点击按钮时直接退出，应该由onCLick方法去关闭popover，不应该由document来关闭
-      if(this.$refs.popover && this.$refs.popover.contains(e.target)) {
-        return
+      if (this.$refs.popover && this.$refs.popover.contains(e.target)) {
+        return;
       }
-      this.close()
+      this.close();
     },
     locateContent() {
-      let contentWrapper = this.$refs.contentWrapper
-      document.body.append(contentWrapper)
-      let triggerWrapper = this.$refs.triggerWrapper
-      let {top,left,bottom,right,height} = triggerWrapper.getBoundingClientRect() //获取元素相对于窗口的位置信息
-      let  differenceHeight = contentWrapper.getBoundingClientRect().height - height
+      let contentWrapper = this.$refs.contentWrapper;
+      document.body.append(contentWrapper);
+      let triggerWrapper = this.$refs.triggerWrapper;
+      let {
+        top,
+        left,
+        bottom,
+        right,
+        height
+      } = triggerWrapper.getBoundingClientRect(); //获取元素相对于窗口的位置信息
+      let differenceHeight =
+        contentWrapper.getBoundingClientRect().height - height;
 
       let contentPosition = {
-          top: {
-              left: left + window.pageXOffset, top: top + window.pageYOffset
-          },
-          bottom: {
-              left: left + window.pageXOffset, top: bottom + window.pageYOffset
-          },
-          left: {
-              left: left + window.pageXOffset, top: top + window.pageYOffset - differenceHeight/2
-          },
-          right: {
-              left: right + window.pageXOffset, top: top + window.pageYOffset - differenceHeight/2
-          }
-      }
-      contentWrapper.style.left = `${contentPosition[this.position].left}px`
-      contentWrapper.style.top = `${contentPosition[this.position].top}px`
+        top: {
+          left: left + window.pageXOffset,
+          top: top + window.pageYOffset
+        },
+        bottom: {
+          left: left + window.pageXOffset,
+          top: bottom + window.pageYOffset
+        },
+        left: {
+          left: left + window.pageXOffset,
+          top: top + window.pageYOffset - differenceHeight / 2
+        },
+        right: {
+          left: right + window.pageXOffset,
+          top: top + window.pageYOffset - differenceHeight / 2
+        }
+      };
+      contentWrapper.style.left = `${contentPosition[this.position].left}px`;
+      contentWrapper.style.top = `${contentPosition[this.position].top}px`;
     },
     open() {
-      this.visible = true
-      setTimeout( () => {
-        this.locateContent()
-        document.addEventListener('click',this.eventHandler)
-      },0)
+      this.showPopover = true;
+      this.$emit("update:visible", true);
+      setTimeout(() => {
+        this.locateContent();
+        document.addEventListener("click", this.eventHandler);
+      }, 0);
       // 下面出了一个问题，为什么document的监听不是在下一个事件循环中
       // this.$nextTick( () => {
       //   this.locateContent()
@@ -119,15 +156,16 @@ export default {
       // })
     },
     close() {
-      this.visible = false
-      document.removeEventListener('click',this.eventHandler)
+      this.showPopover = false;
+      this.$emit("update:visible", false);
+      document.removeEventListener("click", this.eventHandler);
     },
     onClick(e) {
-      if(this.$refs.triggerWrapper.contains(e.target)) {
-        if(this.visible === true) {
-          this.close()
+      if (this.$refs.triggerWrapper.contains(e.target)) {
+        if (this.showPopover === true) {
+          this.close();
         } else {
-          this.open()
+          this.open();
         }
       }
     }
@@ -139,10 +177,12 @@ export default {
 $border-radius: 4px;
 $border-color: #333;
 
-.fade-enter,.fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
-.fade-enter-active,.fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.5s;
 }
 .fade-enter-to {
@@ -161,7 +201,7 @@ $border-color: #333;
   border: 1px solid $border-color;
   border-radius: $border-radius;
   /*box-shadow: 0 0 3px rgba(0,0,0,0.5);*/
-  filter: drop-shadow(0 0 3px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
   background-color: white;
   word-break: break-all;
 
@@ -181,8 +221,9 @@ $border-color: #333;
     max-width: 20em;
   }
 
-  &::before,&::after {
-    content: '';
+  &::before,
+  &::after {
+    content: "";
     display: block;
     width: 0;
     height: 0;
@@ -193,7 +234,8 @@ $border-color: #333;
   &.position-top {
     transform: translateY(-100%);
     margin-top: -10px;
-    &::before,&::after {
+    &::before,
+    &::after {
       border-top-color: black;
       left: 10%;
       top: 100%;
@@ -205,7 +247,8 @@ $border-color: #333;
   }
   &.position-bottom {
     margin-top: 10px;
-    &::before,&::after {
+    &::before,
+    &::after {
       left: 20%;
       bottom: 100%;
       border-bottom-color: black;
@@ -218,7 +261,8 @@ $border-color: #333;
   &.position-left {
     transform: translateX(-100%);
     margin-left: -10px;
-    &::before,&::after {
+    &::before,
+    &::after {
       top: calc(50% - 5px);
       left: 100%;
       border-left-color: black;
@@ -230,7 +274,8 @@ $border-color: #333;
   }
   &.position-right {
     margin-left: 10px;
-    &::before,&::after {
+    &::before,
+    &::after {
       top: calc(50% - 5px);
       right: 100%;
       border-right-color: black;
