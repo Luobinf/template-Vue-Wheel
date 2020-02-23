@@ -74,7 +74,9 @@
             <template v-slot:content>
                 <p>Content内容</p>
                 <p>Content内容</p>
-                <f-button @click="visible = false">Close</f-button>
+               <div>
+                   <button @click="visible = false" style="margin-left: 80%;">Close</button>
+               </div>
             </template>
             <f-button size="small">Top</f-button>
         </f-popover>
@@ -121,6 +123,23 @@
 <!--        <f-button size="small">Right</f-button>-->
 <!--      </f-popover>-->
     </section>
+    <section id="collapse">
+        {{active}}
+      <f-collapse :active-name.sync="active">
+          <f-collapse-item name="1" title="一致性 Consistency">
+            <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
+          </f-collapse-item>
+          <f-collapse-item name="2" title="反馈 Feedback">
+            <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
+          </f-collapse-item>
+          <f-collapse-item name="3" title="效率 Efficiency">
+            <div>清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；</div>
+          </f-collapse-item>
+          <f-collapse-item name="4" title="可控 Controllability">
+            <div>结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。</div>
+          </f-collapse-item>
+      </f-collapse>
+    </section>
   </div>
 </template>
 <script>
@@ -141,6 +160,9 @@
   import gTabsPane from './components/Tabs/TabsPane'
 
   import fPopover from './components/Popover'
+
+  import fCollapse from './components/fCollapse/Collapse'
+  import fCollapseItem from './components/fCollapse/CollapseItem'
   export default {
     name: 'App',
     //混入
@@ -151,7 +173,8 @@
         eventBus: new Vue(),
         activeName: 'second',
         selectedTab: 'sports',
-        visible: false
+        visible: false,
+          active: ['2']
       }
     },
     provide () {
@@ -172,7 +195,9 @@
       gTabsBody,
       gTabsItem,
       gTabsPane,
-      fPopover
+      fPopover,
+      fCollapse,
+      fCollapseItem
     },
     methods: {
       xxx() {
